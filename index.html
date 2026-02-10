@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Website Generator - Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-container {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .progress-message {
+            text-align: center;
+            color: #555;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-left: 3px solid #667eea;
+            padding-left: 10px;
+        }
+
+        .log-entry.success {
+            border-left-color: #28a745;
+        }
+
+        .log-entry.error {
+            border-left-color: #dc3545;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .result-card pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.85em;
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab:hover {
+            background: #d3d8e0;
+        }
+
+        .tab.active:hover {
+            background: #764ba2;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .api-docs {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .api-docs code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .api-docs pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .image-item {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .image-item p {
+            margin-top: 8px;
+            font-weight: 600;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 LangGraph Website Generator</h1>
+            <p>Test the new multi-page website generation workflow</p>
+        </div>
+
+        <div class="content">
+            <!-- API Documentation Section -->
+            <div class="section">
+                <h2 class="section-title">📚 API Documentation</h2>
+                <div class="api-docs">
+                    <h3>Endpoint: <code>POST /api/generate-website</code></h3>
+
+                    <h4>Request Format:</h4>
+                    <pre>{
+  "description": "Your business description here..."
+}</pre>
+
+                    <h4>Response Format (Server-Sent Events):</h4>
+                    <p>The API streams progress updates as SSE (Server-Sent Events):</p>
+
+                    <h5>Progress Update Events:</h5>
+                    <pre>data: {
+  "step": "planning",
+  "status": "in_progress",
+  "progress": 25,
+  "message": "✓ Planning complete: 4 pages planned",
+  "error": null
+}</pre>
+
+                    <h5>Final Success Event:</h5>
+                    <pre>data: {
+  "step": "complete",
+  "status": "completed",
+  "progress": 100,
+  "message": "✓ Website generation complete",
+  "data": {
+    "pages": {
+      "home": {"html": "...", "css": "..."},
+      "about": {"html": "...", "css": "..."}
+    },
+    "image_urls": {
+      "hero": "/uploads/hero_image.png",
+      "features": "/uploads/features_image.png"
+    },
+    "plan": {
+      "pages": [...],
+      "styling": {...},
+      "image_sections": [...],
+      "navigation": [...]
+    }
+  }
+}</pre>
+
+                    <h5>Workflow Steps:</h5>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>planning</strong> (25%): Generate website structure</li>
+                        <li><strong>image_description</strong> (40%): Create targeted image prompts</li>
+                        <li><strong>image_generation</strong> (65%): Generate images with DALL-E 3</li>
+                        <li><strong>html_generation</strong> (95%): Create multi-page HTML/CSS</li>
+                        <li><strong>complete</strong> (100%): Workflow finished</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="section">
+                <h2 class="section-title">✍️ Generate Website</h2>
+                <div class="input-group">
+                    <label for="description">Business Description:</label>
+                    <textarea id="description"
+                        placeholder="Enter your business description here... (e.g., 'AI-powered project management tool for remote teams with task automation, real-time collaboration, and intelligent analytics')"></textarea>
+                </div>
+                <button class="button" id="generateBtn" onclick="generateWebsite()">
+                    🚀 Generate Website
+                </button>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+                <div class="progress-message" id="progressMessage">
+                    Initializing...
+                </div>
+                <div class="log-container" id="logContainer"></div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results" id="resultsContainer">
+                <h2 class="section-title">✅ Results</h2>
+
+                <!-- Generated Images -->
+                <div class="result-card">
+                    <h3>🖼️ Generated Images</h3>
+                    <div class="image-preview" id="imagesPreview"></div>
+                </div>
+
+                <!-- Website Plan -->
+                <div class="result-card">
+                    <h3>📋 Website Plan</h3>
+                    <pre id="planOutput"></pre>
+                </div>
+
+                <!-- Generated Pages -->
+                <div class="result-card">
+                    <h3>📄 Generated Pages</h3>
+                    <div class="page-tabs" id="pageTabs"></div>
+                    <div id="pagesContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let eventSource = null;
+
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function updateProgress(progress, message) {
+            const progressFill = document.getElementById('progressFill');
+            const progressMessage = document.getElementById('progressMessage');
+
+            progressFill.style.width = progress + '%';
+            progressFill.textContent = progress + '%';
+            progressMessage.textContent = message;
+        }
+
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.classList.add('active');
+
+            // Display images
+            if (data.image_urls) {
+                const imagesPreview = document.getElementById('imagesPreview');
+                imagesPreview.innerHTML = '';
+
+                for (const [section, url] of Object.entries(data.image_urls)) {
+                    const imageItem = document.createElement('div');
+                    imageItem.className = 'image-item';
+                    imageItem.innerHTML = `
+                        <img src="${url}" alt="${section}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/><text x=%2250%%22 y=%2250%%22 font-size=%2220%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22>Image Error</text></svg>'">
+                        <p>${section.charAt(0).toUpperCase() + section.slice(1)}</p>
+                    `;
+                    imagesPreview.appendChild(imageItem);
+                }
+            }
+
+            // Display plan
+            if (data.plan) {
+                document.getElementById('planOutput').textContent = JSON.stringify(data.plan, null, 2);
+            }
+
+            // Display pages
+            if (data.pages) {
+                const pageTabs = document.getElementById('pageTabs');
+                const pagesContent = document.getElementById('pagesContent');
+                pageTabs.innerHTML = '';
+                pagesContent.innerHTML = '';
+
+                let firstPage = true;
+                for (const [pageName, pageData] of Object.entries(data.pages)) {
+                    // Create tab
+                    const tab = document.createElement('button');
+                    tab.className = 'tab' + (firstPage ? ' active' : '');
+                    tab.textContent = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+                    tab.onclick = () => switchPage(pageName);
+                    pageTabs.appendChild(tab);
+
+                    // Create page content
+                    const pageContent = document.createElement('div');
+                    pageContent.className = 'page-content' + (firstPage ? ' active' : '');
+                    pageContent.id = `page-${pageName}`;
+                    pageContent.innerHTML = `
+                        <h4>HTML:</h4>
+                        <pre>${escapeHtml(pageData.html)}</pre>
+                        <h4>CSS:</h4>
+                        <pre>${escapeHtml(pageData.css)}</pre>
+                    `;
+                    pagesContent.appendChild(pageContent);
+
+                    firstPage = false;
+                }
+            }
+        }
+
+        function switchPage(pageName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.toLowerCase() === pageName) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`page-${pageName}`).classList.add('active');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function generateWebsite() {
+            const description = document.getElementById('description').value.trim();
+
+            if (!description || description.length < 10) {
+                alert('Please enter a business description (at least 10 characters)');
+                return;
+            }
+
+            // Reset UI
+            document.getElementById('resultsContainer').classList.remove('active');
+            document.getElementById('progressContainer').classList.add('active');
+            document.getElementById('logContainer').innerHTML = '';
+            document.getElementById('generateBtn').disabled = true;
+            updateProgress(0, 'Starting website generation...');
+
+            addLog('Starting website generation workflow...', 'info');
+            addLog(`Description: ${description.substring(0, 100)}...`, 'info');
+
+            try {
+                // Close any existing EventSource
+                if (eventSource) {
+                    eventSource.close();
+                }
+
+                // Create request
+                const requestData = { description };
+
+                // Use fetch to POST, then create EventSource
+                const response = await fetch('/api/generate-website', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Read the stream
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { done, value } = await reader.read();
+
+                    if (done) {
+                        addLog('Stream ended', 'info');
+                        break;
+                    }
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const jsonData = line.substring(6);
+
+                            try {
+                                const data = JSON.parse(jsonData);
+
+                                addLog(`Step: ${data.step} - ${data.message}`,
+                                    data.status === 'failed' ? 'error' : 'success');
+
+                                updateProgress(data.progress, data.message);
+
+                                if (data.status === 'completed' && data.data) {
+                                    addLog('✓ Website generation completed!', 'success');
+                                    displayResults(data.data);
+                                    document.getElementById('generateBtn').disabled = false;
+                                } else if (data.status === 'failed') {
+                                    addLog(`✗ Error: ${data.error}`, 'error');
+                                    alert(`Error: ${data.error}`);
+                                    document.getElementById('generateBtn').disabled = false;
+                                }
+                            } catch (e) {
+                                console.error('Error parsing JSON:', e);
+                            }
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                addLog(`✗ Error: ${error.message}`, 'error');
+                alert(`Error: ${error.message}`);
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+
+        // Example descriptions
+        window.addEventListener('load', function () {
+            const examples = [
+                "AI-powered project management tool for remote teams with task automation, real-time collaboration, and intelligent analytics dashboard",
+                "Modern e-commerce platform for sustainable fashion brands with virtual try-on, eco-friendly shipping, and carbon footprint tracking",
+                "Online learning platform for coding bootcamps with interactive tutorials, live mentoring, and career placement services"
+            ];
+
+            // Set a random example on load
+            document.getElementById('description').value = examples[Math.floor(Math.random() * examples.length)];
+        });
+    </script>
+</body>
+
+</html>
