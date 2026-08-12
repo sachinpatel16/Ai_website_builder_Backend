@@ -306,8 +306,7 @@ class WebsiteFileManager:
         description: str = None,
         website_name: str = None,
         image_urls: Dict[str, str] = None,
-        css_theme: str = None,
-        business_plan: str = None
+        css_theme: str = None
     ) -> Dict[str, any]:
         """
         Complete workflow to save a website with all files and proper structure.
@@ -350,8 +349,8 @@ class WebsiteFileManager:
             'created_at': datetime.now().isoformat(),
             'description': description,
             'plan': plan,
-            'business_plan': business_plan,
             'pages': page_names,
+            
             'image_urls': image_urls or {},
             'has_global_css_theme': bool(css_theme)
         }

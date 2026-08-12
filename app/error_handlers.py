@@ -51,6 +51,8 @@ class RateLimitExceeded(BaseAPIException):
         super().__init__(
             message=message,
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+
+            
             error_code="RATE_LIMIT_EXCEEDED",
             details={"retry_after": retry_after}
         )
